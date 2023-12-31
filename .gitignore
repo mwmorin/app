@@ -1,6 +1,7 @@
 HELP.md
-target/
+
 # Allow target folder so uploaded to GIT, since needed for Render to find jar
+# target/
 # !.mvn/wrapper/maven-wrapper.jar
 # !**/src/main/**/target/
 # !**/src/test/**/target/
