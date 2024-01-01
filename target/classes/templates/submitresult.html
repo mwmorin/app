@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Submit Wordle result</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Wordle Solver</h1>
+<form action="#" th:action="@{/getnextwordui}" th:object="${guess}" method="post">
+    <p>Word guessed: <input type="text" th:field="*{wordGuessed}" /></p>
+    <p>Result (e.g. bbyyg): <input type="text" th:field="*{result}" /></p>
+    <p>Session ID: <input type="text" th:field="*{sessionId}" /></p>
+<!--    <p>Guess this word next: <input type="text" th:field="*{nextBestWordToGuess}" readonly /></p>-->
+<!--    <span th:if="${guess != null && guess.nextBestWordToGuess != null}" th:text="${guess.nextBestWordToGuess}">nextBestWordToGuess</span>-->
+    <p><span th:if="${guess != null && guess.nextBestWordToGuess != null}">GUESS THIS WORD NEXT: </span>
+        <strong><span th:if="${guess != null && guess.nextBestWordToGuess != null}" th:text="${guess.nextBestWordToGuess}"></span></strong></p>
+    <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+</form>
+</body>
+</html>
