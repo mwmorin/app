@@ -13,6 +13,7 @@ public class Guess {
     private String sessionId;
     private String solution;
     private boolean requestIsValid = true; // true by default
+    private String autofocusOnResultField = "";
 
     public String getWordGuessed() {
         return wordGuessed;
@@ -62,6 +63,14 @@ public class Guess {
         this.requestIsValid = requestIsValid;
     }
 
+    public String getAutofocusOnResultField() {
+        return autofocusOnResultField;
+    }
+
+    public void setAutofocusOnResultField(String autofocusOnResultField) {
+        this.autofocusOnResultField = autofocusOnResultField;
+    }
+
     private String toLowerCase(String inputStr)
     {
         return StringUtils.toLowerCase(inputStr, Locale.getDefault());
@@ -75,5 +84,6 @@ public class Guess {
         this.sessionId = null;
         this.solution = null;
         this.requestIsValid = true;
+        this.autofocusOnResultField = "";
     }
 }

@@ -28,13 +28,13 @@ public class WordleSolverFormController {
         return "result";
     }
 
-    @GetMapping("/getnextwordui")
+    @GetMapping(value = {"/getnextwordui", "/"})
     public String getNextWordUI(Model model) {
         model.addAttribute("guess", new Guess());
         return "submitresult";
     }
 
-    @PostMapping("/getnextwordui")
+    @PostMapping(value = {"/getnextwordui", "/"})
     public String greetingSubmit(@ModelAttribute Guess guess, Model model, @RequestParam(value="action", required=true) String action) {
 
         System.out.println("==>> Action is: " + action);
@@ -65,6 +65,9 @@ public class WordleSolverFormController {
             else {
 
                 // Puzzle is not solved. Get best next guess.
+
+                // Set autofocus to result field
+                guess.setAutofocusOnResultField("autofocus");
 
                 // Create sessionId if none set
                 String sessionId = guess.getSessionId();
