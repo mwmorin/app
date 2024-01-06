@@ -44,46 +44,74 @@ public class WordleSolverFormController {
         {
             // Reset button clicked. Delete session files and clear the form.
 
-            // Delete session files if sessionId is set
-            if (!StringUtils.isEmpty(guess.getSessionId()))
-            {
-                // Delete state for given sessionId
-                WordleSolverUtility wordleSolverUtility = new WordleSolverUtility(guess.getSessionId());
-                wordleSolverUtility.deleteAllSerializedSessionFiles();
-            }
-
-            // Clear the form
-            guess = new Guess();
+            guess = reset(guess.getSessionId());
             model.addAttribute("guess", guess);
         }
         else {
-            // Submit button clicked. Determine best next word to guess.
+            // Submit button clicked. If puzzle is solved, reset form and add solution word. Otherwise, determine best next word to guess.
 
-            // Create sessionId if none set
-            String sessionId = guess.getSessionId();
-            if (StringUtils.isEmpty(sessionId)) {
-                // Create sessionId
-                UUID uuid = UUID.randomUUID();
-                sessionId = uuid.toString();
-                guess.setSessionId(sessionId);
-
-                System.out.println("No sessionId set, so created sessionId: " + sessionId);
+            if (StringUtils.isEmpty(guess.getWordGuessed()) || StringUtils.isEmpty(guess.getResult()))
+            {
+                // Validation failed. Specify that on form.
+                guess.setRequestIsValid(false);
+            }
+            else if ("ggggg".equals(guess.getResult()))
+            {
+                // Puzzle solved! Reset form, then add solution.
+                String solution = guess.getWordGuessed(); // Solution is word guessed
+                guess = reset(guess.getSessionId());
+                guess.setSolution(solution);
             }
             else {
-                System.out.println("SessionId passed in: " + sessionId);
+
+                // Puzzle is not solved. Get best next guess.
+
+                // Create sessionId if none set
+                String sessionId = guess.getSessionId();
+                if (StringUtils.isEmpty(sessionId)) {
+                    // Create sessionId
+                    UUID uuid = UUID.randomUUID();
+                    sessionId = uuid.toString();
+                    guess.setSessionId(sessionId);
+
+                    System.out.println("No sessionId set, so created sessionId: " + sessionId);
+                } else {
+                    System.out.println("SessionId passed in: " + sessionId);
+                }
+
+                // Determine best next word to guess.
+                WordleSolverUtility wordleSolverUtility = new WordleSolverUtility(guess.getSessionId());
+                String nextword = wordleSolverUtility.getNextGuess(guess.getWordGuessed(), guess.getResult());
+
+                // Set next word on model
+                guess.setNextBestWordToGuess(nextword);
+                guess.setWordGuessed(nextword); // Populate suggested word to guess as best next guess
+                guess.setResult(null); // Clear the result after each guess
             }
 
-            // Determine best next word to guess.
-            WordleSolverUtility wordleSolverUtility = new WordleSolverUtility(guess.getSessionId());
-            String nextword = wordleSolverUtility.getNextGuess(guess.getWordGuessed(), guess.getResult());
-
-            // Set next word on model
-            guess.setNextBestWordToGuess(nextword);
-            model.addAttribute("guess", guess);
         }
 
         // return submitresult.html template populated with model
+        model.addAttribute("guess", guess);
         return "submitresult";
+    }
+
+    /**
+     * Delete session files and clear the form
+     * @param sessionId
+     * @return cleared form
+     */
+    private Guess reset(String sessionId)
+    {
+        // Delete session files if sessionId is set
+        if (!StringUtils.isEmpty(sessionId))
+        {
+            // Delete state for given sessionId
+            WordleSolverUtility wordleSolverUtility = new WordleSolverUtility(sessionId);
+            wordleSolverUtility.deleteAllSerializedSessionFiles();
+        }
+
+        return new Guess();
     }
 
 }
