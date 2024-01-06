@@ -17,7 +17,7 @@
     </p>
 
     <!-- result field -->
-    <p>Result (e.g. bbyyg): <input style="font-family: sans-serif;font-size: 30px" type="text" th:field="*{result}" /></p>
+    <p>Result (B=Black, Y=Yellow, G=Green, e.g. BBYYG): <input style="font-family: sans-serif;font-size: 30px" type="text" th:field="*{result}" /></p>
 
     <!-- session id field (hidden) -->
     <input style="font-family: sans-serif;font-size: 30px" type="text" th:field="*{sessionId}" hidden/>
@@ -49,24 +49,6 @@ function setFocusToTextBox(){
     document.getElementById("result").focus();
 }
 </script>
-
-<!--Convert text fields to upper case-->
-<!--<script>-->
-<!--  const inputField = document.getElementById("wordGuessed");-->
-
-<!--  inputField.addEventListener("keyup", function(event) {-->
-<!--    event.preventDefault();-->
-<!--    inputField.value = inputField.value.toUpperCase();-->
-<!--  });-->
-<!--</script>-->
-<!--<script>-->
-<!--  const inputField = document.getElementById("result");-->
-
-<!--  inputField.addEventListener("keyup", function(event) {-->
-<!--    event.preventDefault();-->
-<!--    inputField.value = inputField.value.toUpperCase();-->
-<!--  });-->
-<!--</script>-->
 
 </body>
 </html>
