@@ -31,7 +31,7 @@
     </p>
 
     <!-- Validation error -->
-    <p style="color:red;" ><strong><span th:if="${guess != null && !guess.requestIsValid}">Invalid input: Please enter a 5 char guess word and 5 char result!</span></strong>
+    <p style="color:red;" ><strong><span th:if="${guess != null && !guess.requestIsValid}">Invalid input: Please enter a 5 letter word and 5 letter result!</span></strong>
     </p>
 
 </form>
@@ -49,6 +49,24 @@ function setFocusToTextBox(){
     document.getElementById("result").focus();
 }
 </script>
+
+<!--Convert text fields to upper case-->
+<!--<script>-->
+<!--  const inputField = document.getElementById("wordGuessed");-->
+
+<!--  inputField.addEventListener("keyup", function(event) {-->
+<!--    event.preventDefault();-->
+<!--    inputField.value = inputField.value.toUpperCase();-->
+<!--  });-->
+<!--</script>-->
+<!--<script>-->
+<!--  const inputField = document.getElementById("result");-->
+
+<!--  inputField.addEventListener("keyup", function(event) {-->
+<!--    event.preventDefault();-->
+<!--    inputField.value = inputField.value.toUpperCase();-->
+<!--  });-->
+<!--</script>-->
 
 </body>
 </html>

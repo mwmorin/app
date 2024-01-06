@@ -131,10 +131,25 @@ public class WordleSolverUtility {
 	 */
 	public String getNextGuess(String wordGuessed, String result)
 	{
+		String nextWordToGuess = ""; // return param
+
+		// Validate input. Return empty
+		if (validateInput(wordGuessed, result))
+		{
+			// Valid. Format input.
+			wordGuessed = wordGuessed.toLowerCase();
+			result = result.toLowerCase();
+			System.out.println("Input is valid.");
+		}
+		else
+		{
+			// Not valid
+			System.err.println("ERROR: Input is NOT valid: wordGuess = '" + wordGuessed + "', result = '" + result + "'");
+			return nextWordToGuess;
+		}
+
 		this.guess = wordGuessed;
 		this.result = result;
-		
-		String nextWordToGuess = "";
 
 		// Read in serialized data
 		deserializeState();
@@ -1032,6 +1047,28 @@ public class WordleSolverUtility {
             System.out.print("key : " + entry.getKey() + " & Value : "); 
             System.out.println(entry.getValue()); 
         } 
+	}
+
+	/**
+	 * Determines if input is valid (must be 5 letter strings).
+	 *
+	 * @param word
+	 * @param result
+	 * @return true if valid; false otherwise
+	 */
+	private boolean validateInput(String word, String result)
+	{
+		boolean isValid = true;
+
+		if ((word == null) || (word.length() != 5)
+				|| (result == null) && (result.length() != 5)
+		)
+		{
+			// Not valid
+			isValid = false;
+		}
+
+		return isValid;
 	}
 }
 

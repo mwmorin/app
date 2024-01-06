@@ -1,10 +1,6 @@
 package com.mwmorin.wordlesolver.model;
 
 
-import org.thymeleaf.util.StringUtils;
-
-import java.util.Locale;
-
 public class Guess {
 
     private String wordGuessed;
@@ -20,7 +16,7 @@ public class Guess {
     }
 
     public void setWordGuessed(String wordGuessed) {
-        this.wordGuessed = toLowerCase(wordGuessed);
+        this.wordGuessed = toUpperCase(wordGuessed);
     }
 
     public String getResult() {
@@ -28,7 +24,7 @@ public class Guess {
     }
 
     public void setResult(String result) {
-        this.result = toLowerCase(result);
+        this.result = toUpperCase(result);
     }
 
     public String getNextBestWordToGuess() {
@@ -36,7 +32,7 @@ public class Guess {
     }
 
     public void setNextBestWordToGuess(String nextBestWordToGuess) {
-        this.nextBestWordToGuess = toLowerCase(nextBestWordToGuess);
+        this.nextBestWordToGuess = toUpperCase(nextBestWordToGuess);
     }
 
     public String getSessionId() {
@@ -71,9 +67,15 @@ public class Guess {
         this.autofocusOnResultField = autofocusOnResultField;
     }
 
-    private String toLowerCase(String inputStr)
+    private String toUpperCase(String inputStr)
     {
-        return StringUtils.toLowerCase(inputStr, Locale.getDefault());
+        String upperStr = inputStr;
+        if (inputStr != null)
+        {
+            upperStr = inputStr.toUpperCase();
+        }
+
+        return upperStr;
     }
 
     public void clearAll()

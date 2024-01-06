@@ -56,7 +56,7 @@ public class WordleSolverFormController {
             {
                 // Form has invalid input. Simply return form model below (which is already set with validation results).
             }
-            else if ("ggggg".equals(guess.getResult()))
+            else if ("ggggg".equalsIgnoreCase(guess.getResult()))
             {
                 // Puzzle solved! Reset form, then add solution.
                 String solution = guess.getWordGuessed(); // Solution is word guessed
