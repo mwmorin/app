@@ -2,8 +2,9 @@
 <html xmlns:th="https://www.thymeleaf.org">
 
 <head>
-    <title>Submit Wordle result</title>
+    <title>Wordle Solver</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body style="font-family: sans-serif;font-size: 30px" onload="setFocusToTextBox()">
 <h1>Wordle Solver</h1>
@@ -25,12 +26,12 @@
     <p><input style="font-family: sans-serif;font-size: 30px" type="submit" name="action" value="Submit" /> <input style="font-family: sans-serif;font-size: 30px" type="submit" name="action" value="Reset" /></p>
 
     <!-- Solution message -->
-    <p><span th:if="${guess != null && guess.solution != null}">CONGRATULATIONS - ANSWER: </span>
+    <p><span th:if="${guess != null && guess.solution != null}">SOLUTION: </span>
         <strong><span th:if="${guess != null && guess.solution != null}" th:text="${guess.solution}"></span></strong>
     </p>
 
     <!-- Validation error -->
-    <p style="color:red;" ><strong><span th:if="${guess != null && !guess.requestIsValid}">Error: Please enter a guess word and result!</span></strong>
+    <p style="color:red;" ><strong><span th:if="${guess != null && !guess.requestIsValid}">Invalid input: Please enter a 5 char guess word and 5 char result!</span></strong>
     </p>
 
 </form>

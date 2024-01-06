@@ -40,6 +40,7 @@ public class WordleSolverFormController {
         System.out.println("==>> Action is: " + action);
 
         // Take action based on button clicked
+        // RESET
         if (action.equalsIgnoreCase("Reset"))
         {
             // Reset button clicked. Delete session files and clear the form.
@@ -47,13 +48,13 @@ public class WordleSolverFormController {
             guess = reset(guess.getSessionId());
             model.addAttribute("guess", guess);
         }
+        // SUBMIT
         else {
             // Submit button clicked. If puzzle is solved, reset form and add solution word. Otherwise, determine best next word to guess.
 
-            if (StringUtils.isEmpty(guess.getWordGuessed()) || StringUtils.isEmpty(guess.getResult()))
+            if (!validate(guess))
             {
-                // Validation failed. Specify that on form.
-                guess.setRequestIsValid(false);
+                // Form has invalid input. Simply return form model below (which is already set with validation results).
             }
             else if ("ggggg".equals(guess.getResult()))
             {
@@ -115,6 +116,37 @@ public class WordleSolverFormController {
         }
 
         return new Guess();
+    }
+
+    /**
+     * Determines if the form values (populated on the Guess instance) are valid, and set validation results on form.
+     *
+     * Validation rules:
+     * 1. wordGuess must contain exactly 5 chars
+     * 2. result must contain exactly 5 chars
+     *
+     * @param guess
+     * @return true if valid; false otherwise
+     */
+    private boolean validate(Guess guess)
+    {
+        boolean isValid = true;
+        if (guess == null
+                || StringUtils.isEmpty(guess.getWordGuessed())  || guess.getWordGuessed().length() != 5
+                || StringUtils.isEmpty(guess.getResult()) || guess.getResult().length() != 5
+            )
+        {
+            // Not valid
+            guess.setRequestIsValid(false);
+            isValid = false;
+        }
+        else
+        {
+            // Is valid
+            guess.setRequestIsValid(true);
+        }
+
+        return isValid;
     }
 
 }
