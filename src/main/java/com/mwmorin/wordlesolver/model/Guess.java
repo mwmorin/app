@@ -10,13 +10,14 @@ public class Guess {
     private String solution;
     private boolean requestIsValid = true; // true by default
     private String autofocusOnResultField = "";
+    private String errorMessage;
 
     public String getWordGuessed() {
         return wordGuessed;
     }
 
     public void setWordGuessed(String wordGuessed) {
-        this.wordGuessed = toUpperCase(wordGuessed);
+        this.wordGuessed = formatInput(wordGuessed);
     }
 
     public String getResult() {
@@ -24,7 +25,7 @@ public class Guess {
     }
 
     public void setResult(String result) {
-        this.result = toUpperCase(result);
+        this.result = formatInput(result);
     }
 
     public String getNextBestWordToGuess() {
@@ -32,7 +33,7 @@ public class Guess {
     }
 
     public void setNextBestWordToGuess(String nextBestWordToGuess) {
-        this.nextBestWordToGuess = toUpperCase(nextBestWordToGuess);
+        this.nextBestWordToGuess = formatInput(nextBestWordToGuess);
     }
 
     public String getSessionId() {
@@ -67,12 +68,27 @@ public class Guess {
         this.autofocusOnResultField = autofocusOnResultField;
     }
 
-    private String toUpperCase(String inputStr)
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    /**
+     * Formats input field value by:
+     * - stripping leading/trailing whitespace
+     * - converting to all upper case letters
+     * @param inputStr
+     * @return
+     */
+    private String formatInput(String inputStr)
     {
         String upperStr = inputStr;
         if (inputStr != null)
         {
-            upperStr = inputStr.toUpperCase();
+            upperStr = inputStr.strip().toUpperCase();
         }
 
         return upperStr;
@@ -87,5 +103,22 @@ public class Guess {
         this.solution = null;
         this.requestIsValid = true;
         this.autofocusOnResultField = "";
+        this.errorMessage = null;
+    }
+
+    public String toString()
+    {
+        String toStr = this.getClass().getName() + ": ["
+                + "wordGuessed = " + wordGuessed + ", "
+                + "result = " + result + ", "
+                + "nextBestWordToGuess = " + nextBestWordToGuess + ", "
+                + "sessionId = " + sessionId + ", "
+                + "solution = " + solution + ", "
+                + "requestIsValid = " + requestIsValid + ", "
+                + "autofocusOnResultField = " + autofocusOnResultField + ", "
+                + "errorMessage = " + errorMessage
+                + "]";
+
+        return toStr;
     }
 }

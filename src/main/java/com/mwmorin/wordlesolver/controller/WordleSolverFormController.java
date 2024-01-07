@@ -37,7 +37,9 @@ public class WordleSolverFormController {
     @PostMapping(value = {"/getnextwordui", "/"})
     public String greetingSubmit(@ModelAttribute Guess guess, Model model, @RequestParam(value="action", required=true) String action) {
 
+        System.out.println("greetingSubmit() called with: "); // TODO - change method name to getNextWordUI and change this print string
         System.out.println("==>> Action is: " + action);
+        System.out.println("==>> Guess is: " + guess.toString());
 
         // Take action based on button clicked
         // RESET
@@ -87,10 +89,23 @@ public class WordleSolverFormController {
                 WordleSolverUtility wordleSolverUtility = new WordleSolverUtility(guess.getSessionId());
                 String nextword = wordleSolverUtility.getNextGuess(guess.getWordGuessed(), guess.getResult());
 
-                // Set next word on model
-                guess.setNextBestWordToGuess(nextword);
-                guess.setWordGuessed(nextword); // Populate suggested word to guess as best next guess
-                guess.setResult(null); // Clear the result after each guess
+                // Process answer
+                if (!StringUtils.isEmpty(nextword))
+                {
+                    // Next word was found. Set it on model.
+                    System.out.println("Next best word to guess was found: " + nextword);
+                    guess.setNextBestWordToGuess(nextword);
+                    guess.setWordGuessed(nextword); // Populate suggested word to guess as best next guess
+                    guess.setResult(null); // Clear the result after each guess
+                }
+                else
+                {
+                    // Next word NOT found. likely result was typed in wrong. Reset form then add error message.
+                    System.err.println("Next best word to guess was NOT found.");
+                    guess = reset(guess.getSessionId());
+                    guess.setErrorMessage("Error: No word found. Please ensure result is correct. Game has reset.");
+                }
+
             }
 
         }
@@ -138,6 +153,7 @@ public class WordleSolverFormController {
         {
             // Not valid
             guess.setRequestIsValid(false);
+            guess.setErrorMessage("Invalid input: Please enter a 5 letter word and 5 letter result!");
             isValid = false;
         }
         else
