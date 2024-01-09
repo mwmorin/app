@@ -4,6 +4,8 @@ package com.mwmorin.wordlesolver.model;
 public class Guess {
 
     private String wordGuessed;
+    private int guessNumber = 1;
+    private int guessesToSolve = 0;
     private String result;
     private String nextBestWordToGuess;
     private String sessionId;
@@ -18,6 +20,22 @@ public class Guess {
 
     public void setWordGuessed(String wordGuessed) {
         this.wordGuessed = formatInput(wordGuessed);
+    }
+
+    public int getGuessNumber() {
+        return guessNumber;
+    }
+
+    public void setGuessNumber(int guessNumber) {
+        this.guessNumber = guessNumber;
+    }
+
+    public int getGuessesToSolve() {
+        return guessesToSolve;
+    }
+
+    public void setGuessesToSolve(int guessesToSolve) {
+        this.guessesToSolve = guessesToSolve;
     }
 
     public String getResult() {
@@ -97,6 +115,8 @@ public class Guess {
     public void clearAll()
     {
         this.wordGuessed = null;
+        this.guessNumber = 1;
+        this.guessesToSolve = 0;
         this.result = null;
         this.nextBestWordToGuess = null;
         this.sessionId = null;
@@ -110,6 +130,8 @@ public class Guess {
     {
         String toStr = this.getClass().getName() + ": ["
                 + "wordGuessed = " + wordGuessed + ", "
+                + "guessNumber = " + guessNumber + ", "
+                + "guessesToSolve = " + guessesToSolve + ", "
                 + "result = " + result + ", "
                 + "nextBestWordToGuess = " + nextBestWordToGuess + ", "
                 + "sessionId = " + sessionId + ", "

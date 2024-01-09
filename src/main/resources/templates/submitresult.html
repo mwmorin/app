@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 
 <head>
     <title>Wordle Solver</title>
@@ -7,12 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body style="font-family: sans-serif;font-size: 30px" onload="setFocusToTextBox()">
-<h1>Wordle Solver</h1>
+<h2>Wordle Solver</h2>
 <form action="#" th:action="@{/}" th:object="${guess}" method="post">
 
     <!-- word field -->
-    <p><span th:if="${guess == null || guess.nextBestWordToGuess == null}">Initial guess: </span>
-        <span th:if="${guess != null && guess.nextBestWordToGuess != null}">Guess this word next: </span>
+<!--    works-->
+<!--    <p><span th:if="${guess == null || guess.nextBestWordToGuess == null}">Initial guess: </span>-->
+<!--        <span th:if="${guess != null && guess.nextBestWordToGuess != null}">Guess this word next: </span>-->
+<!--        <input style="font-family: sans-serif;font-size: 30px" type="text" th:field="*{wordGuessed}" />-->
+<!--    </p>-->
+    <p>Guess # <span th:text="${guess.guessNumber}"></span><span>: </span>
         <input style="font-family: sans-serif;font-size: 30px" type="text" th:field="*{wordGuessed}" />
     </p>
 
@@ -20,16 +24,23 @@
     <p>Result: <input style="font-family: sans-serif;font-size: 30px" type="text" th:field="*{result}" /></p>
     <p style="color:gray;font-size: 20px"><i>(B=Black, Y=Yellow, G=Green, e.g. BBYYG)</i></p>
 
-    <!-- session id field (hidden) -->
+    <!-- Set non-input fields as hidden on form so are passed back to server upon form submit -->
     <input style="font-family: sans-serif;font-size: 30px" type="text" th:field="*{sessionId}" hidden/>
+    <input style="font-family: sans-serif;font-size: 30px" type="text" th:field="*{guessNumber}" hidden/>
 
     <!-- Submit and Reset buttons -->
     <p><input style="font-family: sans-serif;font-size: 30px" type="submit" name="action" value="Submit" /> <input style="font-family: sans-serif;font-size: 30px" type="submit" name="action" value="Reset" /></p>
 
     <!-- Solution message -->
-    <p><span th:if="${guess != null && guess.solution != null}">SOLVED!: </span>
-        <strong><span th:if="${guess != null && guess.solution != null}" th:text="${guess.solution}"></span></strong>
-    </p>
+<!--    <p style="color:green;"><span th:if="${guess != null && guess.solution != null}">SOLVED!: </span>-->
+<!--        <strong><span th:if="${guess != null && guess.solution != null}" th:text="${guess.solution}"></span></strong>-->
+<!--    </p>-->
+    <p style="color:green;"><strong>
+        <span th:if="${guess.solution != null}">Solution: </span>
+        <span th:if="${guess.solution != null}" th:text="${guess.solution}"></span>
+        <span th:if="${guess.solution != null}">, Guesses: </span>
+        <span th:if="${guess.solution != null}" th:text="${guess.guessesToSolve}"></span>
+    </strong></p>
 
     <!-- Display error message if set -->
 <!--    <p style="color:red;" ><strong><span th:if="${guess != null && !guess.requestIsValid}">Invalid input: Please enter a 5 letter word and 5 letter result!</span></strong>-->
