@@ -13,17 +13,17 @@ public class WordleSolverApplication {
 		SpringApplication.run(WordleSolverApplication.class, args);
 	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/getnextwordjson").allowedOrigins("*");
-				registry.addMapping("/getnextwordjson").allowedHeaders("*");
-				registry.addMapping("/getnextwordjson").allowedMethods("*");
-				registry.addMapping("/getnextwordjson").allowedOriginPatterns("*");
-			}
-		};
-	}
+//	@Bean
+//	public WebMvcConfigurer corsConfigurer() {
+//		return new WebMvcConfigurer() {
+//			@Override
+//			public void addCorsMappings(CorsRegistry registry) {
+//				registry.addMapping("/getnextwordjson").allowedOrigins("*");
+//				registry.addMapping("/getnextwordjson").allowedHeaders("*");
+//				registry.addMapping("/getnextwordjson").allowedMethods("*");
+//				registry.addMapping("/getnextwordjson").allowedOriginPatterns("*");
+//			}
+//		};
+//	}
 
 }

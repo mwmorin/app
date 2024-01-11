@@ -4,14 +4,28 @@ import com.mwmorin.wordlesolver.model.GetNextGuessResponse;
 import com.mwmorin.wordlesolver.util.JsonUtils;
 import com.mwmorin.wordlesolver.util.WordleSolverUtility;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-//@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.POST, RequestMethod.DELETE, RequestMethod.GET})
+@CrossOrigin(origins = "*")
 @RestController
 public class WordleSolverRestController {
+
+    /**
+     * Enable CORS by handling preflight check
+     * @return
+     */
+    @RequestMapping(
+            value = "/**",
+            method = RequestMethod.OPTIONS
+    )
+    public ResponseEntity handle() {
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
     @Value("${wordlesolver.prop1}")
     private String prop1;
