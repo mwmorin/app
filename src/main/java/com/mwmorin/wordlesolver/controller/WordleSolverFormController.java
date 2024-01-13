@@ -2,7 +2,10 @@ package com.mwmorin.wordlesolver.controller;
 
 import com.mwmorin.wordlesolver.model.Greeting;
 import com.mwmorin.wordlesolver.model.Guess;
+import com.mwmorin.wordlesolver.util.PrintUtility;
 import com.mwmorin.wordlesolver.util.WordleSolverUtility;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -14,26 +17,64 @@ import java.util.UUID;
 @Controller
 public class WordleSolverFormController {
 
+    private static String className = WordleSolverFormController.class.getName();
+
+    /**
+     * Enable CORS by handling preflight check
+     * @return
+     */
+//    @RequestMapping(
+//            value = "/**",
+////            value = "/preflightmike",
+//            method = RequestMethod.OPTIONS
+//    )
+//    public ResponseEntity handle() {
+//
+//        System.out.println("===>>> Preflight called!!!!!!!!!");
+//        ResponseEntity re = new ResponseEntity(HttpStatus.OK);
+//
+//        return new ResponseEntity(HttpStatus.OK);
+//    }
+
     @GetMapping("/greetingformtest")
     public String greetingForm(Model model) {
+
+        // Debug - print method name called
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        PrintUtility.printMethod(methodName);
+
         model.addAttribute("greeting", new Greeting());
         return "greeting";
     }
 
     @PostMapping("/greetingformtest")
     public String greetingSubmit(@ModelAttribute Greeting greeting, Model model) {
+
+        // Debug - print method name called
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        PrintUtility.printMethod(methodName);
+
         model.addAttribute("greeting", greeting);
         return "result";
     }
 
     @GetMapping(value = {"/getnextwordui", "/"})
     public String getNextWordUI(Model model) {
+
+        // Debug - print method name called
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        PrintUtility.printMethod(methodName);
+
         model.addAttribute("guess", new Guess());
         return "submitresult";
     }
 
     @PostMapping(value = {"/getnextwordui", "/"})
     public String greetingSubmit(@ModelAttribute Guess guess, Model model, @RequestParam(value="action", required=true) String action) {
+
+        // Debug - print method name called
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        PrintUtility.printMethod(methodName);
 
         System.out.println("greetingSubmit() called with: "); // TODO - change method name to getNextWordUI and change this print string
         System.out.println("==>> Action is: " + action);

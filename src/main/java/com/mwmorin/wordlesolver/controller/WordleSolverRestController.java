@@ -2,8 +2,10 @@ package com.mwmorin.wordlesolver.controller;
 
 import com.mwmorin.wordlesolver.model.GetNextGuessResponse;
 import com.mwmorin.wordlesolver.util.JsonUtils;
+import com.mwmorin.wordlesolver.util.PrintUtility;
 import com.mwmorin.wordlesolver.util.WordleSolverUtility;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,7 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "*")
 @RestController
+@RequestMapping("/rest")
 public class WordleSolverRestController {
+
+    private static String className = WordleSolverRestController.class.getName();
 
     /**
      * Enable CORS by handling preflight check
@@ -21,10 +26,24 @@ public class WordleSolverRestController {
      */
     @RequestMapping(
             value = "/**",
+//            value = "/preflightmike",
             method = RequestMethod.OPTIONS
     )
     public ResponseEntity handle() {
-        return new ResponseEntity(HttpStatus.OK);
+
+        // Debug - print method name called
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        PrintUtility.printMethod(methodName);
+
+        System.out.println("===>>> Preflight called!!!!!!!!!");
+//        ResponseEntity re = new ResponseEntity(HttpStatus.OK);
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+//        responseHeaders.setLocation(location);
+        responseHeaders.set("Access-Control-Allow-Origin", "*");
+        return new ResponseEntity<String>("Hello World", responseHeaders, HttpStatus.OK);
+
+//        return new ResponseEntity(HttpStatus.OK);
     }
 
     @Value("${wordlesolver.prop1}")
@@ -32,17 +51,31 @@ public class WordleSolverRestController {
 
     @RequestMapping("/greeting")
     public String getGreeting() {
+
+        // Debug - print method name called
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        PrintUtility.printMethod(methodName);
+
         return "Hi it's Mike!, prop1 value: " + prop1;
     }
 
     @RequestMapping(value = "/testpost", method = RequestMethod.POST)
     public String testFormPost(String sessionId, String guess, String result) {
+
+        // Debug - print method name called
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        PrintUtility.printMethod(methodName);
+
         return "Hi from test testFormPost. You passed in params:\n "
                 + "sessionId: " + sessionId + ", guess: " + guess + ", result: " + result;
     }
 
     @RequestMapping(value = "/getnextword", method = RequestMethod.POST)
     public String getNextWord(String sessionId, String guess, String result) {
+
+        // Debug - print method name called
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        PrintUtility.printMethod(methodName);
 
         String nextword = null;
 
@@ -57,6 +90,10 @@ public class WordleSolverRestController {
     @RequestMapping(value = "/getnextwordjson", method = RequestMethod.POST)
     public String getNextWordJSON(String sessionId, String guess, String result) {
 
+        // Debug - print method name called
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        PrintUtility.printMethod(methodName);
+
         // Instantiate WordleSolverUtility
         WordleSolverUtility wordleSolverUtility = new WordleSolverUtility(sessionId);
 
@@ -69,6 +106,11 @@ public class WordleSolverRestController {
     @RequestMapping(value = "/cleanup", method = RequestMethod.DELETE)
     public void cleanupSession(String sessionId)
     {
+
+        // Debug - print method name called
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        PrintUtility.printMethod(methodName);
+
         // Delete state for given sessionId
         WordleSolverUtility wordleSolverUtility = new WordleSolverUtility(sessionId);
         wordleSolverUtility.deleteAllSerializedSessionFiles();
