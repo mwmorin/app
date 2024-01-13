@@ -8,10 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -85,6 +84,33 @@ public class WordleSolverRestController {
         nextword = wordleSolverUtility.getNextGuess(guess, result);
 
         return nextword;
+    }
+
+    @RequestMapping(value = "/getnextwordjson", method = RequestMethod.GET)
+    public String getNextWordJSON(@RequestParam(required=false) Map<String,String> qparams) {
+
+        // Debug - print method name called
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        PrintUtility.printMethod(methodName);
+
+        // DEBUG: !!!!!
+        qparams.forEach((a,b) -> {
+                    System.out.println(String.format("%s -> %s",a,b));
+                });
+
+        // Get query params
+        String guess = qparams.get("guess");
+        String result = qparams.get("result");
+        String sessionId = qparams.get("sessionId");
+
+        // Instantiate WordleSolverUtility
+        WordleSolverUtility wordleSolverUtility = new WordleSolverUtility(sessionId);
+
+        // Get the next word to guess
+        GetNextGuessResponse getNextGuessResponse = wordleSolverUtility.getNextGuessJSON(guess, result);
+
+        // Convert response to JSON and return
+        return JsonUtils.objectToJson(getNextGuessResponse);
     }
 
     @RequestMapping(value = "/getnextwordjson", method = RequestMethod.POST)
