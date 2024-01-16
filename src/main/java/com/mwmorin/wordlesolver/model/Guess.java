@@ -1,25 +1,29 @@
 package com.mwmorin.wordlesolver.model;
 
+import java.io.Serializable;
 
-public class Guess {
+/**
+ * Attributes of a single guess.
+ */
+public class Guess implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private String wordGuessed;
-    private int guessNumber = 1;
-    private int guessesToSolve = 0;
+    private int guessNumber = 0;
     private String result;
-    private String nextBestWordToGuess;
-    private String sessionId;
-    private String solution;
-    private boolean requestIsValid = true; // true by default
-    private String autofocusOnResultField = "";
-    private String errorMessage;
 
     public String getWordGuessed() {
         return wordGuessed;
     }
 
+    public Guess(String wordGuessed, int guessNumber, String result) {
+        setWordGuessed(toUpper(wordGuessed));
+        setResult(toUpper(result));
+        setGuessNumber(guessNumber);
+    }
+
     public void setWordGuessed(String wordGuessed) {
-        this.wordGuessed = formatInput(wordGuessed);
+        this.wordGuessed = toUpper(wordGuessed);
     }
 
     public int getGuessNumber() {
@@ -30,117 +34,38 @@ public class Guess {
         this.guessNumber = guessNumber;
     }
 
-    public int getGuessesToSolve() {
-        return guessesToSolve;
-    }
-
-    public void setGuessesToSolve(int guessesToSolve) {
-        this.guessesToSolve = guessesToSolve;
-    }
-
     public String getResult() {
         return result;
     }
 
     public void setResult(String result) {
-        this.result = formatInput(result);
-    }
-
-    public String getNextBestWordToGuess() {
-        return nextBestWordToGuess;
-    }
-
-    public void setNextBestWordToGuess(String nextBestWordToGuess) {
-        this.nextBestWordToGuess = formatInput(nextBestWordToGuess);
-    }
-
-    public String getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
-    }
-
-    public String getSolution() {
-        return solution;
-    }
-
-    public void setSolution(String solution) {
-        this.solution = solution;
-    }
-
-    public boolean isRequestIsValid() {
-        return requestIsValid;
-    }
-
-    public void setRequestIsValid(boolean requestIsValid) {
-        this.requestIsValid = requestIsValid;
-    }
-
-    public String getAutofocusOnResultField() {
-        return autofocusOnResultField;
-    }
-
-    public void setAutofocusOnResultField(String autofocusOnResultField) {
-        this.autofocusOnResultField = autofocusOnResultField;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    /**
-     * Formats input field value by:
-     * - stripping leading/trailing whitespace
-     * - converting to all upper case letters
-     * @param inputStr
-     * @return
-     */
-    private String formatInput(String inputStr)
-    {
-        String upperStr = inputStr;
-        if (inputStr != null)
-        {
-            upperStr = inputStr.strip().toUpperCase();
-        }
-
-        return upperStr;
-    }
-
-    public void clearAll()
-    {
-        this.wordGuessed = null;
-        this.guessNumber = 1;
-        this.guessesToSolve = 0;
-        this.result = null;
-        this.nextBestWordToGuess = null;
-        this.sessionId = null;
-        this.solution = null;
-        this.requestIsValid = true;
-        this.autofocusOnResultField = "";
-        this.errorMessage = null;
+        this.result = toUpper(result);
     }
 
     public String toString()
     {
         String toStr = this.getClass().getName() + ": ["
-                + "wordGuessed = " + wordGuessed + ", "
                 + "guessNumber = " + guessNumber + ", "
-                + "guessesToSolve = " + guessesToSolve + ", "
-                + "result = " + result + ", "
-                + "nextBestWordToGuess = " + nextBestWordToGuess + ", "
-                + "sessionId = " + sessionId + ", "
-                + "solution = " + solution + ", "
-                + "requestIsValid = " + requestIsValid + ", "
-                + "autofocusOnResultField = " + autofocusOnResultField + ", "
-                + "errorMessage = " + errorMessage
+                + "wordGuessed = " + wordGuessed + ", "
+                + "result = " + result
                 + "]";
 
         return toStr;
+    }
+
+    /**
+     * Returns given input string on all upper case letters
+     * @param inputStr
+     * @return
+     */
+    private String toUpper(String inputStr)
+    {
+        String upperStr = inputStr;
+        if (inputStr != null)
+        {
+            upperStr = inputStr.toUpperCase();
+        }
+
+        return upperStr;
     }
 }

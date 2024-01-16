@@ -1641,7 +1641,7 @@ overt,28.5
 patch,28.5
 sibyl,28.5
 torah,28.5
-guess,28.475
+guessDetails,28.475
 chink,28.47
 sweep,28.46
 easel,28.45

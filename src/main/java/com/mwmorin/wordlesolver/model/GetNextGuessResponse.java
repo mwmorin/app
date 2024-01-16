@@ -1,5 +1,8 @@
 package com.mwmorin.wordlesolver.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GetNextGuessResponse {
 
     /*
@@ -16,6 +19,8 @@ public class GetNextGuessResponse {
     private String sessionId;
     private boolean isRequestValid = true;
     private String errorMessage;
+    private List<Guess> guessHistory = new ArrayList<Guess>();
+    private boolean isSolved = false;
 
     public String getWord() {
         return word;
@@ -47,5 +52,21 @@ public class GetNextGuessResponse {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public List<Guess> getGuessHistory() {
+        return guessHistory;
+    }
+
+    public void setGuessHistory(List<Guess> guessHistory) {
+        this.guessHistory = guessHistory;
+    }
+
+    public boolean isSolved() {
+        return isSolved;
+    }
+
+    public void setSolved(boolean solved) {
+        isSolved = solved;
     }
 }

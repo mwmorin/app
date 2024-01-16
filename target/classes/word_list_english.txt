@@ -15628,7 +15628,7 @@ guava
 gubernatorial
 guerilla
 guerrilla
-guess
+guessDetails
 guesser
 guesstimate
 guesswork
@@ -31780,7 +31780,7 @@ secondarily
 secondary
 second-class
 seconder
-second-guess
+second-guessDetails
 secondhand
 second-in-command
 secondly
