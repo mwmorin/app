@@ -34,7 +34,7 @@ public class WordleSolverRestController {
 
         // Debug - print method name called
         String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
-        PrintUtility.printMethod(methodName);
+        PrintUtility.printMethod(methodName, RequestMethod.POST.name());
 
         return "Hi from test testFormPost. You passed in params:\n "
                 + "sessionId: " + sessionId + ", guess: " + guess + ", result: " + result;
@@ -62,7 +62,7 @@ public class WordleSolverRestController {
 
         // Debug - print method and query params
         String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
-        PrintUtility.printMethod(methodName);
+        PrintUtility.printMethod(methodName, RequestMethod.GET.name());
         PrintUtility.printQueryParams(qparams);
 
         // Get query params
@@ -85,7 +85,7 @@ public class WordleSolverRestController {
 
         // Debug - print method name called
         String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
-        PrintUtility.printMethod(methodName);
+        PrintUtility.printMethod(methodName, RequestMethod.POST.name());
 
         // Instantiate WordleSolverUtility
         WordleSolverUtility wordleSolverUtility = new WordleSolverUtility(sessionId);
@@ -102,7 +102,23 @@ public class WordleSolverRestController {
 
         // Debug - print method name called
         String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
-        PrintUtility.printMethod(methodName);
+        PrintUtility.printMethod(methodName, RequestMethod.DELETE.name());
+
+        // Delete state for given sessionId
+        WordleSolverUtility wordleSolverUtility = new WordleSolverUtility(sessionId);
+        wordleSolverUtility.deleteAllSerializedSessionFiles();
+    }
+
+    @RequestMapping(value = "/cleanup", method = RequestMethod.GET)
+    public void cleanupSession(@RequestParam(required=false) Map<String,String> qparams)
+    {
+       // Debug - print method and query params
+        String methodName = new Object() {}.getClass().getEnclosingMethod().getName();
+        PrintUtility.printMethod(methodName, RequestMethod.GET.name());
+        PrintUtility.printQueryParams(qparams);
+
+        // Get query params
+        String sessionId = qparams.get("sessionId");
 
         // Delete state for given sessionId
         WordleSolverUtility wordleSolverUtility = new WordleSolverUtility(sessionId);
