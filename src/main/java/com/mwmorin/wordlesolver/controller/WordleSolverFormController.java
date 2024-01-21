@@ -78,15 +78,6 @@ public class WordleSolverFormController {
             {
                 // Form has invalid input. Simply return form model below (which is already set with validation results).
             }
-//            else if ("ggggg".equalsIgnoreCase(guessDetails.getResult()))
-//            {
-//                // Puzzle solved! Reset form, then add solution.
-//                String solution = guessDetails.getWordGuessed(); // Solution is word guessed
-//                int guessesToSolve = guessDetails.getGuessNumber();
-//                guessDetails = reset(guessDetails.getSessionId());
-//                guessDetails.setSolution(solution);
-//                guessDetails.setGuessesToSolve(guessesToSolve);
-//            }
             else {
 
                 // Input is valid. Get best next guess.
@@ -115,9 +106,9 @@ public class WordleSolverFormController {
                 String nextword = getNextGuessResponse.getWord();
 
                 // Process results
-                if (!StringUtils.isEmpty(nextword))
+                if (getNextGuessResponse.isRequestValid())
                 {
-                    // Next word was found
+                    // Request is valid
 
                     if (getNextGuessResponse.isSolved())
                     {
@@ -145,10 +136,11 @@ public class WordleSolverFormController {
                 }
                 else
                 {
-                    // Next word NOT found. likely result was typed in wrong. Reset form then add error message.
-                    System.err.println("Next best word to guess was NOT found.");
+                    // Request is not valid.
+                    System.err.println("Request is not valid.");
                     guessDetails = reset(guessDetails.getSessionId());
-                    guessDetails.setErrorMessage("Error: No word found. Please ensure result is correct. Game has reset.");
+                    guessDetails.setErrorMessage(getNextGuessResponse.getErrorMessage() + " Game has reset.");
+                    guessDetails.setGuessHistory(getNextGuessResponse.getGuessHistory());
                 }
             }
         }

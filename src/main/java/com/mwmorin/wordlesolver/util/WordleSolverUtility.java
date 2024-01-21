@@ -145,247 +145,49 @@ public class WordleSolverUtility {
 	 * 			- if all rules pass, then we found our next guess
 	 * 
 	 *
-	 * @param wordGuessed
-	 * @param result
+	 * @param inputGuess
+	 * @param inputResult
 	 * @return
 	 */
-//	public String getNextGuess(String wordGuessed, String result) // TODO - make this a wrapper of getNextGuessJSON().
-//	{
-//		String nextWordToGuess = ""; // return param
-//
-//		// Validate input. Return empty result if invalid.
-//		if (validateInput(wordGuessed, result))
-//		{
-//			// Valid. Format input.
-//			wordGuessed = wordGuessed.toLowerCase();
-//			result = result.toLowerCase();
-//			System.out.println("Input is valid.");
-//
-//		}
-//		else
-//		{
-//			// Not valid
-//			System.err.println("ERROR: Input is NOT valid: wordGuess = '" + wordGuessed + "', result = '" + result + "'");
-//			return nextWordToGuess;
-//		}
-//
-//		this.guess = wordGuessed;
-//		this.result = result;
-//
-//		// Read in serialized data
-//		deserializeState();
-//
-//		// Add guess to guessHistory
-//		// Determine guess number (will be 1 more than size of guessHistory)
-//		int guessNumber = guessHistory.size() + 1;
-//		Guess currentGuess = new Guess(wordGuessed, guessNumber, result);
-//		guessHistory.add(currentGuess);
-//
-//		// Process the results into rules
-//
-//		/////////////////////////////////////////////////////////////////
-//		// RULE 1: positions where we know the letter that goes there
-//		/////////////////////////////////////////////////////////////////
-//
-//		// 	- these are the positions with green letters
-//		// 	- store in char[]
-//		//	- put '-' in a position if letter is not known
-//		//	- example: if we know that 'h' is the 2nd char and 't' is the 5th char: {-,h,-,-,t});
-//		//	- do not wipe out existing to keep analysis of previous guesses
-//
-//		for (int resultIterCount = 0; resultIterCount < 5; resultIterCount++)
-//		{
-//			// If result has green, add corresponding guess letter to positionsWithRightLetter
-//			if (greenChar.equals(result.charAt(resultIterCount)))
-//			{
-//				positionsWithRightLetter[resultIterCount] = guess.charAt(resultIterCount);
-//			}
-//		}
-//		// DEBUG..
-//		LOGGER.config("positionsWithRightLetter is: " + new String(positionsWithRightLetter));
-//
-//
-//		///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		// RULE 2: positions where we know what letters do NOT go there (but do not know which letter does go there)
-//		///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//		// 	- these are positions with black or yellow letters
-//		//	- example: { 0:(b,k,c) 1:(h,a,w), ...}
-//		//	- add to current list to keep info from previous guesses
-//
-//		for (int resultIterCount = 0; resultIterCount < 5; resultIterCount++)
-//		{
-//			// If result has black or yellow, add corresponding guess letter to positionsWithWrongLetters
-//			if (blackChar.equals(result.charAt(resultIterCount)) || yellowChar.equals(result.charAt(resultIterCount)))
-//			{
-////				// Instantiate list if none at this index yet
-////				if (positionsWithWrongLetters[resultIterCount] == null)
-////				{
-////					positionsWithWrongLetters[resultIterCount] = new ArrayList<Character>();
-////				}
-////
-//				// Add letters to list
-//				positionsWithWrongLetters[resultIterCount].add(guess.charAt(resultIterCount));
-//			}
-//		}
-//		// DEBUG..
-//		for (int i = 0; i < positionsWithWrongLetters.length; i++)
-//		{
-//			LOGGER.config("positionsWithWrongLetters[" + i + "] = " + positionsWithWrongLetters[i]);
-//		}
-//
-//
-//		///////////////////////////////////////////////////////////////////
-//		// RULE 3: letters for which we know exact number of occurrences
-//		///////////////////////////////////////////////////////////////////
-//
-//		//	- We know this for the following cases:
-//		//		- letters that have at least one black occurrence
-//		//			- # of occurrences of a black letter = # of yellow + # of green of that letter
-//		//		- all 5 letters are green or yellow (edge case but have seen this happen; in this case, wipe out contents of lettersWithMinButNotExactOccurrencesKnown from rule 4 since all letters covered in rule 3 now)
-//		//			- # of occurrences of a letter (when all 5 letters are green or yellow) = # of yellow + # of green of that letter
-//		//	- store in HashMap lettersWithExactOccurrencesKnown (example  d:1 a:2 r:1); again, add to list since this may not be our first guess
-//		//	- remove letter from lettersWithMinButNotExactOccurrencesKnown (if present) since exact # is known
-//
-//		// first check the edge case - all 5 letters are green or yellow
-//		if (allLettersAreGreenOrYellow())
-//		{
-//			// All letters are green or yellow. Thus, we know the exact number of each letter. We will therefore wipe out the current contents of lettersWithExactOccurrencesKnown and set it based on current results.
-//			lettersWithExactOccurrencesKnown.clear();
-//
-//			for (int resultIterCount = 0; resultIterCount < 5; resultIterCount++)
-//			{
-//				// skip letter if already in lettersWithExactOccurrencesKnown
-//				if (!lettersWithExactOccurrencesKnown.containsKey(guess.charAt(resultIterCount)))
-//				{
-//					int count = countOfYellowAndGreen(guess.charAt(resultIterCount));
-//					lettersWithExactOccurrencesKnown.put(guess.charAt(resultIterCount), count);
-//				}
-//			}
-//
-//			// We will also wipe out the contents of lettersWithMinButNotExactOccurrencesKnown from rule 4 since all letters are covered in rule 3 now
-//			lettersWithMinButNotExactOccurrencesKnown.clear();
-//		}
-//		else
-//			// otherwise, check for letters that have at least one black occurrence
-//		{
-//			for (int resultIterCount = 0; resultIterCount < 5; resultIterCount++)
-//			{
-//				// skip letter if already in lettersWithExactOccurrencesKnown
-//				if (!lettersWithExactOccurrencesKnown.containsKey(guess.charAt(resultIterCount)))
-//				{
-//					if (hasBlack(guess.charAt(resultIterCount)))
-//					{
-//						int count = countOfYellowAndGreen(guess.charAt(resultIterCount));
-//						lettersWithExactOccurrencesKnown.put(guess.charAt(resultIterCount), count);
-//
-//						// remove letter from lettersWithMinButNotExactOccurrencesKnown (if present) since exact # is known
-//						lettersWithMinButNotExactOccurrencesKnown.remove(guess.charAt(resultIterCount));
-//					}
-//				}
-//			}
-//		}
-//		// DEBUG..
-//		LOGGER.config ("After rule 3:");
-//		LOGGER.config("lettersWithExactOccurrencesKnown = " + lettersWithExactOccurrencesKnown);
-//		LOGGER.config("lettersWithMinButNotExactOccurrencesKnown = " + lettersWithMinButNotExactOccurrencesKnown);
-//
-//
-//		/////////////////////////////////////////////////////////////////////////////////////////////////////
-//		// RULE 4: letters for which we know a non-zero min # of occurrences, but do not know the exact #
-//		/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//		//	- these will be letters that are green or yellow AND never black AND are not in lettersWithExactOccurrencesKnown
-//		//	- skip this rule if we know the exact number of all letters in answer (i.e. when allLettersAreGreenOrYellow is true)
-//		//	- if letter already exists in map, then update it's value; if letter does not already exist in map, then add it; leave all other entries intact
-//		//	- min # of occurrences = # of green + # of yellow
-//
-//		if (!allLettersAreGreenOrYellow)
-//		{
-//			for (int resultIterCount = 0; resultIterCount < 5; resultIterCount++)
-//			{
-//				if (!hasBlack(guess.charAt(resultIterCount)))
-//				{
-//					// letter is never black, and, since it's present, has at least one green or yellow
-//					// skip letter if in lettersWithExactOccurrencesKnown
-//					if (!lettersWithExactOccurrencesKnown.containsKey(guess.charAt(resultIterCount)))
-//					{
-//						int count = countOfYellowAndGreen(guess.charAt(resultIterCount));
-//						// add or update this letter in map (remove it, then add it)
-//						lettersWithMinButNotExactOccurrencesKnown.remove(guess.charAt(resultIterCount));
-//						lettersWithMinButNotExactOccurrencesKnown.put(guess.charAt(resultIterCount), count);
-//					}
-//				}
-//			}
-//		}
-//		// DEBUG..
-//		LOGGER.config ("After rule 4:");
-//		LOGGER.config("lettersWithExactOccurrencesKnown = " + lettersWithExactOccurrencesKnown);
-//		LOGGER.config("lettersWithMinButNotExactOccurrencesKnown = " + lettersWithMinButNotExactOccurrencesKnown);
-//
-//
-//		////////////////////////////////////
-//		// Determine next word to guess
-//		////////////////////////////////////
-//
-//		// Determine first word from fiveLetterWordsAndWeightsMap that satisfies all rules
-//
-//		for (String word : fiveLetterWordsAndWeightsMap.keySet())
-//		{
-//			// Check word against rules
-//			if (wordSatisfiesAllRules(word))
-//			{
-//				// Word satisfies all rules. Make this the next guess word, and stop looking for next guess.
-//				nextWordToGuess = word;
-//				break;
-//			}
-//		}
-//
-//		// Serialize state
-//		serializeState();
-//
-//		return nextWordToGuess;
-//	}
-
-	public GetNextGuessResponse getNextGuess(String wordGuessed, String result) // TODO input = GetNextGuessRequest
+	public GetNextGuessResponse getNextGuess(String inputGuess, String inputResult) // TODO input = GetNextGuessRequest
 	{
-		//String nextWordToGuess = ""; // return param
-		getNextGuessResponse.setSessionId(this.sessionId);
-
-		// Validate input. Return empty result if invalid.
-		if (validateInput(wordGuessed, result))
-		{
-			// Valid. Format input.
-			wordGuessed = wordGuessed.toLowerCase();
-			result = result.toLowerCase();
-			System.out.println("Input is valid.");
-		}
-		else
-		{
-			// Not valid
-			System.err.println("ERROR: Input is NOT valid: wordGuess = '" + wordGuessed + "', result = '" + result + "'");
-			return getNextGuessResponse;
-		}
-
-		this.guess = wordGuessed;
-		this.result = result;
-
 		// Read in serialized data
 		deserializeState();
 
 		// Add guess to guessHistory; add guessHistory to response
 		// Determine guess number (will be 1 more than size of guessHistory)
 		int guessNumber = guessHistory.size() + 1;
-		Guess currentGuess = new Guess(wordGuessed, guessNumber, result);
+		Guess currentGuess = new Guess(inputGuess, guessNumber, inputResult);
 		guessHistory.add(currentGuess);
 		getNextGuessResponse.setGuessHistory(guessHistory);
+
+		// Set formatted input on this instance
+		guess = (inputGuess != null)? inputGuess.toLowerCase() : null;
+		result = (inputResult != null)? inputResult.toLowerCase() : null;
+
+		getNextGuessResponse.setSessionId(this.sessionId);
+
+
+
+		// Validate input. Return empty result if invalid.
+		if (validateInput())
+		{
+			// Valid. Format input.
+			System.out.println("Input is valid.");
+		}
+		else
+		{
+			// Not valid
+			System.err.println("ERROR: Input is NOT valid: wordGuess = '" + inputGuess + "', result = '" + result + "'");
+			return getNextGuessResponse;
+		}
 
 		// If passed in result indicates the puzzle is solved, then set needed items on response and return
 		if ("ggggg".equalsIgnoreCase(result))
 		{
 			// Puzzle is solved! No need to find next word.
 			getNextGuessResponse.setSolved(true);
-			getNextGuessResponse.setWord(wordGuessed);
+			getNextGuessResponse.setWord(inputGuess);
 			return getNextGuessResponse;
 		}
 
@@ -426,12 +228,6 @@ public class WordleSolverUtility {
 			// If result has black or yellow, add corresponding guess letter to positionsWithWrongLetters
 			if (blackChar.equals(result.charAt(resultIterCount)) || yellowChar.equals(result.charAt(resultIterCount)))
 			{
-//				// Instantiate list if none at this index yet
-//				if (positionsWithWrongLetters[resultIterCount] == null)
-//				{
-//					positionsWithWrongLetters[resultIterCount] = new ArrayList<Character>();
-//				}
-//
 				// Add letters to list
 				positionsWithWrongLetters[resultIterCount].add(guess.charAt(resultIterCount));
 			}
@@ -1055,6 +851,30 @@ public class WordleSolverUtility {
 	}
 
 	/**
+	 * Determines the total number of yellow and green occurrences of a given letter, based on given word and result.
+	 * @param letter
+	 * @return total number of yellow and green occurrences of letter
+	 */
+	private int countOfYellowAndGreen(char letter, String word, String result)
+	{
+		int count = 0;
+
+		for (int i = 0; i < word.length(); i++)
+		{
+			if (word.charAt(i) == letter)
+			{
+				if ((result.charAt(i) == yellowChar) || (result.charAt(i) == greenChar))
+				{
+					count++;
+				}
+			}
+
+		}
+
+		return count;
+	}
+
+	/**
 	 * Determines if all letters in result are either green or yellow (i.e, none are black)
 	 * 
 	 * @return true if all letters in result are either green or yellow
@@ -1167,6 +987,42 @@ public class WordleSolverUtility {
 
 		return count;
 	}
+
+	/**
+	 * Determines the number of times a given letter has a given color in a given word/result pair.
+	 *
+	 * For example:
+	 * 	input: word = chick, result = gbbyb, wordLetter = c, color = y
+	 * 	return: 1
+	 *
+	 * @param word
+	 * @param result
+	 * @param wordLetter
+	 * @param color
+	 * @return
+	 */
+	private int colorCountOfLetter(String word, String result, char wordLetter, char color)
+	{
+		int colorCount = 0;
+
+		for (int i = 1; i < word.length(); i++)
+		{
+			if (word.charAt(i) == wordLetter)
+			{
+				// given char is present in word at this position
+
+				// check if actual color matches given color
+				if (result.charAt(i) == color)
+				{
+					// Colors match. Increment colorCount;
+					colorCount++;
+				}
+			}
+		}
+
+		return colorCount;
+	}
+
 
 	/**
 	 * Determines the weight of a word based on:
@@ -1312,26 +1168,43 @@ public class WordleSolverUtility {
 		}
 	}
 
+
+	private boolean validateInput()
+	{
+		boolean isValid = true;
+
+		// Validate input syntax
+		isValid = validateInputSyntax();
+
+		if (isValid) {
+
+			// Validate result value does not contradict past results
+			isValid = validateResultAgainstPastResults();
+		}
+
+		return isValid;
+
+	}
+
 	/**
-	 * Determines if input is valid (must be 5 letter strings).
+	 * Determines if input syntax is valid (guess and result must be 5 letter strings).
+	 * Sets error message on global response if not valid.
 	 *
-	 * @param word
-	 * @param result
-	 * @return true if valid; false otherwise
+	 * @return true if valid; false if not valid
 	 */
-	private boolean validateInput(String word, String result)
+	private boolean validateInputSyntax()
 	{
 		boolean isValid = true;
 		ArrayList<String> errors = new ArrayList<>();
 		//String errors = "";
 
-		// Validate - word
-		if ((word == null) || (word.length() != 5))
+		// Validate word length
+		if ((guess == null) || (guess.length() != 5))
 		{
 			isValid = false;
 			errors.add("word field must be 5 letters");
 		}
-		// Validate - result
+		// Validate result length
 		if ((result == null) || (result.length() != 5))
 		{
 			isValid = false;
@@ -1340,12 +1213,88 @@ public class WordleSolverUtility {
 
 		// Build final error message
 		if (!isValid){
-			getNextGuessResponse.setErrorMessage("Validation failed: " + errors.toString());
+			getNextGuessResponse.setErrorMessage("Validation failed: " + errors.toString() + ".");
 		}
 		getNextGuessResponse.setRequestValid(isValid);
 
 		return isValid;
 	}
+
+	/**
+	 * 	Validates if result does not contradict previous results.
+	 * 	If invalid, sets error message on global response.
+	 *
+	 * 	Validations:
+	 * 			1. result letter is only black:
+	 * 				- invalid if:
+	 * 					- that letter has ever been yellow or green in any position in past results
+	 * 			2. result letter is green:
+	 * 				NOTE: can check this for green only (e.g. #1: chick (ybbby), #2: thick (bbbyb) -- 'c' in position 4 changed from black to yellow, which is valid in this case
+	 * 				invalid if:
+	 * 					- letter was black or yellow in same position in any past result
+	 * 			3. result letter is black or yellow:
+	 * 				invalid if:
+	 * 					- letter was green in same position in any past result
+	 * 			4. More validations .. add later
+	 * @return true if valid; false if not valid
+	 */
+	private boolean validateResultAgainstPastResults() {
+
+		boolean isValid = true;
+		ArrayList<String> errors = new ArrayList<>();
+
+		// Do validations
+
+		// 1. result letter is only black:
+		//	- invalid if:
+		//		- that letter has ever been yellow or green in any position in past results
+		// TODO - MIKE !!!!!!!!!!!!
+
+		for (int i = 0; i < guess.length(); i++) {
+			if (result.charAt(i) == blackChar) {
+				// This letter has a black result in this position.
+				// See how many times this letter is yellow or green in the current result
+				if (countOfYellowAndGreen(guess.charAt(i)) == 0)
+				{
+					// This letter is only black in the current result
+					// If this letter has EVER been yellow or green in any position in past results, then current result is not a valid
+					if (historicalCountOfYellowAndGreen(guess.charAt(i)) > 0) {
+						// Invalid
+						isValid = false;
+						errors.add("Letter '" + guess.charAt(i) + "' is only B in current result, however it has a Y or G past results.");
+						break;
+					}
+				}
+			}
+		}
+
+		// Build final error message
+		if (!isValid){
+			getNextGuessResponse.setErrorMessage("Validation failed: " + errors.toString() + ".");
+		}
+		getNextGuessResponse.setRequestValid(isValid);
+
+		return isValid;
+	}
+
+	/**
+	 * Determine number of times given letter has been yellow in green in past results.
+	 *
+	 * @param letter
+	 * @return
+	 */
+	private int historicalCountOfYellowAndGreen(char letter) {
+		int count = 0;
+
+		// Iter thru past results
+		for (Guess guessObj : guessHistory)
+		{
+			count = count + countOfYellowAndGreen(letter, guessObj.getWordGuessed().toLowerCase(), guessObj.getResult().toLowerCase());
+		}
+
+		return count;
+	}
+
 }
 
 	
